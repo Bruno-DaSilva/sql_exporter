@@ -251,7 +251,11 @@ func (j *Job) updateConnections() {
 				}
 			}
 			if newConn.driver == "snowflake" {
-				cfg := gosnowflake.ParseDSN(conn)
+				cfg, err := gosnowflake.ParseDSN(conn)
+                                if err != nil {
+                                        level.Error(j.log).Log("msg", "Failed to parse Snowflake DSN", "connection", conn, "err", err)
+                                        continue
+                                }
 
 				dsn, err := gosnowflake.DSN(cfg)
 				if err != nil {
