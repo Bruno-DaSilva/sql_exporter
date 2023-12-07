@@ -252,24 +252,7 @@ func (j *Job) updateConnections() {
 				}
 			}
 			if newConn.driver == "snowflake" {
-				cfg := &gosnowflake.Config{
-					Account: u.Host,
-					User:    u.User.Username(),
-				}
-
-				pw, set := u.User.Password()
-				if set {
-					cfg.Password = pw
-				}
-
-				if u.Port() != "" {
-					portStr, err := strconv.Atoi(u.Port())
-					if err != nil {
-						level.Error(j.log).Log("msg", "Failed to parse Snowflake port", "connection", conn, "err", err)
-						continue
-					}
-					cfg.Port = portStr
-				}
+				cfg := ParseDSN(conn)
 
 				dsn, err := gosnowflake.DSN(cfg)
 				if err != nil {
