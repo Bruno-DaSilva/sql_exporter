@@ -252,7 +252,7 @@ func (j *Job) updateConnections() {
 				}
 			}
 			if newConn.driver == "snowflake" {
-				cfg := ParseDSN(conn)
+				cfg := gosnowflake.ParseDSN(conn)
 
 				dsn, err := gosnowflake.DSN(cfg)
 				if err != nil {
